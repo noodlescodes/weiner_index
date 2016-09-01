@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Graph {
 	private int[][] adjacency_matrix;
@@ -20,6 +21,41 @@ public class Graph {
 	
 	public Graph(int[][] adj_mat) {
 		adjacency_matrix = adj_mat; // is this how memory works in java?
+	}
+	
+	public Graph(String filename) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			String line = br.readLine();
+			int order = line.length();
+			adjacency_matrix = new int[order][order];
+			shortest_path = new int[order][order];
+			
+			int i = 0;
+			while(line != null) {
+				for(int j = 0; j < line.length(); j++) {
+					adjacency_matrix[i][j] = Integer.parseInt(Character.toString(line.charAt(j)));
+				}
+				line = br.readLine();
+				i++;
+			}
+			br.close();
+		}
+		catch(Exception e) {
+		}
+		reset_shortest_path();
+	}
+	
+	public Graph(String str, int order) {
+		adjacency_matrix = new int[order][order];
+		shortest_path = new int[order][order];
+		for(int i = 0; i < order; i++) {
+			for(int j = 0; j < order; j++) {
+				adjacency_matrix[i][j] = Integer.parseInt(Character.toString(str.charAt(i * order + j)));
+				
+			}
+		}
+		reset_shortest_path();
 	}
 	
 	void AddUndirectedEdge(int i, int j) {
